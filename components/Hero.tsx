@@ -42,8 +42,8 @@ export default function Hero() {
 
       <style jsx>{`
         .hero-section {
-          background: linear-gradient(135deg, var(--color-primary-blue) 0%, var(--color-primary-blue-dark) 100%);
-          color: var(--color-neutral-white);
+          background: var(--color-neutral-white);
+          color: var(--color-primary-blue);
           position: relative;
           overflow: hidden;
           padding: var(--spacing-3xl) 0;
@@ -58,7 +58,7 @@ export default function Hero() {
           right: -10%;
           width: min(800px, 150vw);
           height: min(800px, 150vw);
-          background: radial-gradient(circle, rgba(0, 163, 140, 0.15) 0%, transparent 70%);
+          background: transparent;
           border-radius: 50%;
           pointer-events: none;
         }
@@ -70,7 +70,7 @@ export default function Hero() {
           left: -5%;
           width: min(600px, 120vw);
           height: min(600px, 120vw);
-          background: radial-gradient(circle, rgba(255, 140, 0, 0.1) 0%, transparent 70%);
+          background: transparent;
           border-radius: 50%;
           pointer-events: none;
         }

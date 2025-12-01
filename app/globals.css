@@ -1,22 +1,31 @@
 /* Import Google Fonts */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=Poppins:wght@700;800;900&family=Roboto:wght@400;500&display=swap');
 
-/* CSS Variables - Design System */
+/* CSS Variables - Design System - Orange Theme */
 :root {
   /* Primary Colors */
-  --color-primary-blue: #004D7A;
-  --color-neutral-white: #FFFFFF;
-  --color-neutral-gray: #F8F8F8;
+  --color-primary-blue: #1e3a8a;
+  --color-primary-blue-dark: #1e293b;
 
-  /* Secondary Colors */
-  --color-orange: #FF8C00;
-  --color-teal: #00A38C;
+  /* Neutral Colors */
+  --color-neutral-white: #ffffff;
+  --color-neutral-gray: #f8fafc;
+  --color-neutral-gray-dark: #e2e8f0;
 
-  /* Additional Shades for depth */
-  --color-primary-blue-light: #0066A1;
-  --color-primary-blue-dark: #003D61;
-  --color-orange-hover: #FF9F1A;
-  --color-teal-light: #00BBAA;
+  /* Accent Colors - Orange (No Green!) */
+  --color-orange: #f97316;
+  --color-orange-hover: #ea580c;
+  --color-orange-light: #fed7aa;
+
+  /* Teal Aliases (map to orange for compatibility) */
+  --color-teal: #f97316;
+  --color-teal-light: #fb923c;
+  --color-teal-dark: #ea580c;
+
+  /* Supporting Colors */
+  --color-blue-light: #dbeafe;
+  --color-success: #22c55e;
+  --color-error: #ef4444;
 
   /* Typography */
   --font-headline: 'Poppins', sans-serif;
@@ -176,7 +185,7 @@ section {
 
 /* Focus Styles */
 *:focus-visible {
-  outline: 3px solid var(--color-teal);
+  outline: 3px solid var(--color-orange);
   outline-offset: 2px;
 }
 
