@@ -1,0 +1,22 @@
+[
+    {
+        "id": 100,
+        "slug": "hindi-pronouns",
+        "title": "Hindi Pronouns",
+        "description": "Learn the foundation Hindi pronouns for everyday conversation.",
+        "accessLevel": "free",
+        "components": [
+            "video",
+            "notes"
+        ],
+        "videoProvider": "vimeo",
+        "videoId": "1142315086",
+        "duration": "5 min",
+        "goals": [
+            "Recap on Noun",
+            "Identify subject and object pronouns in Hindi",
+            "Use pronouns correctly in simple sentences",
+            "Distinguish formal vs informal pronouns"
+        ]
+    }
+]

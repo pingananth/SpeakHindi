@@ -4,194 +4,240 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { LESSONS } from '@/lib/lessons-config'
 
-export default function LessonSidebar() {
-    const pathname = usePathname()
+interface LessonSidebarProps {
+  isOpen: boolean
+  onToggle: () => void
+}
 
-    const getAccessBadge = (accessLevel: string) => {
-        if (accessLevel === 'free') return { text: 'FREE', color: 'var(--color-teal)' }
-        if (accessLevel === 'login-required') return { text: 'Login Required', color: 'var(--color-orange)' }
-        return { text: 'Premium', color: 'var(--color-primary-blue)' }
-    }
+export default function LessonSidebar({ isOpen, onToggle }: LessonSidebarProps) {
+  const pathname = usePathname()
 
-    return (
-        <aside className="sidebar">
-            <div className="sidebar-header">
-                <h2 className="sidebar-title">Course Lessons</h2>
-                <p className="sidebar-subtitle">{LESSONS.length} Lessons</p>
-            </div>
+  return (
+    <div className="sidebar-wrapper">
+      {/* Toggle Button (Visible when closed or on mobile) */}
+      <button
+        className={`sidebar-toggle ${isOpen ? 'open' : 'closed'}`}
+        onClick={onToggle}
+        aria-label={isOpen ? "Close sidebar" : "Open sidebar"}
+      >
+        {isOpen ? (
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M18 6L6 18M6 6l12 12"></path>
+          </svg>
+        ) : (
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+        )}
+      </button>
 
-            <nav className="lessons-list">
-                {LESSONS.map((lesson) => {
-                    const isActive = pathname?.includes(lesson.slug)
-                    const badge = getAccessBadge(lesson.accessLevel)
+      <aside className={`sidebar ${isOpen ? 'visible' : 'hidden'}`}>
+        <div className="sidebar-header">
+          <h2 className="sidebar-title">Course Content</h2>
+          <button className="close-btn-mobile" onClick={onToggle}>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M18 6L6 18M6 6l12 12"></path>
+            </svg>
+          </button>
+        </div>
 
-                    return (
-                        <Link
-                            key={lesson.id}
-                            href={`/courses/${lesson.slug}`}
-                            className={`lesson-item ${isActive ? 'active' : ''}`}
-                        >
-                            <div className="lesson-number">
-                                <span>{lesson.id}</span>
-                            </div>
-                            <div className="lesson-info">
-                                <h3 className="lesson-title">{lesson.title}</h3>
-                                <div className="lesson-meta">
-                                    <span className="lesson-duration">{lesson.duration}</span>
-                                    <span className="lesson-badge" style={{ color: badge.color }}>
-                                        {badge.text}
-                                    </span>
-                                </div>
-                            </div>
-                        </Link>
-                    )
-                })}
-            </nav>
+        <nav className="lessons-list">
+          {LESSONS.map((lesson) => {
+            const isActive = pathname?.includes(lesson.slug)
 
-            <style jsx>{`
-        .sidebar {
-          background: var(--color-neutral-white);
-          border-right: 1px solid rgba(0, 77, 122, 0.1);
-          height: 100%;
-          overflow-y: auto;
-          position: sticky;
-          top: 0;
-        }
+            return (
+              <Link
+                key={lesson.id}
+                href={`/courses/${lesson.slug}`}
+                className={`lesson-item ${isActive ? 'active' : ''}`}
+              >
+                <span className="lesson-number">{lesson.id}</span>
+                <span className="lesson-title">{lesson.title.replace(`Lesson ${lesson.id}: `, '')}</span>
+                {lesson.accessLevel === 'free' && <span className="status-dot free" />}
+                {lesson.accessLevel === 'login-required' && <span className="status-dot lock" />}
+              </Link>
+            )
+          })}
+        </nav>
+      </aside>
 
-        .sidebar-header {
-          padding: var(--spacing-xl);
-          border-bottom: 2px solid var(--color-neutral-gray);
-        }
+      <style jsx>{`
+            .sidebar-wrapper {
+                height: 100%;
+                position: relative;
+                z-index: 40;
+            }
 
-        .sidebar-title {
-          font-family: var(--font-headline);
-          font-size: 1.5rem;
-          font-weight: 800;
-          color: var(--color-primary-blue);
-          margin-bottom: var(--spacing-xs);
-        }
+            .sidebar {
+                background: var(--color-neutral-white);
+                border-right: 1px solid var(--color-neutral-gray-dark);
+                height: 100%;
+                overflow-y: auto;
+                overflow-x: hidden;
+                width: 100%;
+                transition: transform var(--transition-normal);
+            }
 
-        .sidebar-subtitle {
-          font-size: 0.875rem;
-          color: var(--color-primary-blue);
-          opacity: 0.6;
-        }
+            .sidebar.hidden {
+                transform: translateX(-100%);
+                width: 0;
+                overflow: hidden;
+                border: none;
+            }
 
-        .lessons-list {
-          padding: var(--spacing-md);
-        }
+            .sidebar-toggle {
+                position: fixed;
+                left: ${isOpen ? '260px' : '20px'};
+                top: 100px; /* Below header */
+                z-index: 50;
+                background: var(--color-neutral-white);
+                border: 2px solid var(--color-orange);
+                border-radius: 50%;
+                width: 40px;
+                height: 40px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+                box-shadow: var(--shadow-md);
+                color: var(--color-orange);
+                transition: all var(--transition-normal);
+            }
+            
+            .sidebar-toggle:hover {
+                background: var(--color-orange);
+                color: var(--color-neutral-white);
+                transform: scale(1.1);
+            }
 
-        .lesson-item {
-          display: flex;
-          gap: var(--spacing-md);
-          padding: var(--spacing-md);
-          border-radius: var(--radius-md);
-          margin-bottom: var(--spacing-sm);
-          text-decoration: none;
-          transition: all var(--transition-fast);
-          border: 2px solid transparent;
-        }
+            .sidebar-header {
+                padding: var(--spacing-lg);
+                border-bottom: 1px solid var(--color-neutral-gray-dark);
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                position: sticky;
+                top: 0;
+                background: var(--color-neutral-white);
+                z-index: 10;
+            }
 
-        .lesson-item:hover {
-          background: var(--color-neutral-gray);
-          border-color: var(--color-teal);
-        }
+            .sidebar-title {
+                font-family: var(--font-headline);
+                font-size: 1.125rem;
+                font-weight: 700;
+                color: var(--color-primary-blue);
+                margin: 0;
+            }
 
-        .lesson-item.active {
-          background: linear-gradient(135deg, rgba(0, 77, 122, 0.05) 0%, rgba(0, 163, 140, 0.05) 100%);
-          border-color: var(--color-teal);
-        }
+            .close-btn-mobile {
+                display: none;
+                background: none;
+                border: none;
+                cursor: pointer;
+                color: var(--color-primary-blue);
+            }
 
-        .lesson-number {
-          flex-shrink: 0;
-          width: 40px;
-          height: 40px;
-          border-radius: 50%;
-          background: linear-gradient(135deg, var(--color-primary-blue) 0%, var(--color-teal) 100%);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-family: var(--font-headline);
-          font-weight: 800;
-          font-size: 1.125rem;
-          color: var(--color-neutral-white);
-        }
+            .lessons-list {
+                padding: var(--spacing-md) 0;
+                display: flex;
+                flex-direction: column;
+                gap: var(--spacing-xs); /* Space between lessons */
+            }
 
-        .lesson-item.active .lesson-number {
-          box-shadow: 0 4px 12px rgba(0, 163, 140, 0.4);
-        }
+            .lesson-item {
+                display: flex;
+                align-items: flex-start; /* Align to top for multi-line */
+                padding: var(--spacing-md) var(--spacing-lg);
+                text-decoration: none;
+                color: var(--color-primary-blue);
+                font-size: 0.9375rem;
+                border-left: 3px solid transparent;
+                transition: all var(--transition-fast);
+                /* Removed white-space: nowrap and overflow hidden */
+            }
 
-        .lesson-info {
-          flex: 1;
-          min-width: 0;
-        }
+            .lesson-item:hover {
+                background-color: var(--color-neutral-gray);
+                color: var(--color-orange);
+            }
 
-        .lesson-title {
-          font-family: var(--font-headline-alt);
-          font-size: 0.9375rem;
-          font-weight: 700;
-          color: var(--color-primary-blue);
-          margin-bottom: var(--spacing-xs);
-          overflow: hidden;
-          text-overflow: ellipsis;
-          white-space: nowrap;
-        }
+            .lesson-item.active {
+                background-color: rgba(249, 115, 22, 0.05);
+                border-left-color: var(--color-orange);
+                color: var(--color-orange);
+                font-weight: 600;
+            }
 
-        .lesson-meta {
-          display: flex;
-          gap: var(--spacing-sm);
-          align-items: center;
-          font-size: 0.75rem;
-        }
+            .lesson-number {
+                font-family: var(--font-headline);
+                font-weight: 700;
+                margin-right: var(--spacing-md);
+                opacity: 0.5;
+                min-width: 24px;
+                flex-shrink: 0;
+                margin-top: 2px; /* Align with first line of title */
+            }
 
-        .lesson-duration {
-          color: var(--color-primary-blue);
-          opacity: 0.6;
-        }
+            .lesson-item.active .lesson-number {
+                opacity: 1;
+            }
 
-        .lesson-badge {
-          font-weight: 700;
-          text-transform: uppercase;
-          font-size: 0.6875rem;
-          letter-spacing: 0.5px;
-        }
+            .lesson-title {
+                flex: 1;
+                /* Allow wrapping */
+                line-height: 1.4;
+            }
 
-        @media (max-width: 768px) {
-          .sidebar {
-            position: relative;
-            border-right: none;
-            border-bottom: 1px solid rgba(0, 77, 122, 0.1);
-          }
+            .status-dot {
+                width: 8px;
+                height: 8px;
+                border-radius: 50%;
+                margin-left: var(--spacing-sm);
+                flex-shrink: 0;
+            }
 
-          .sidebar-header {
-            padding: var(--spacing-md);
-          }
+            .status-dot.free {
+                background-color: var(--color-success);
+            }
 
-          .sidebar-title {
-            font-size: 1.25rem;
-          }
+            .status-dot.lock {
+                background-color: var(--color-neutral-gray-dark);
+            }
 
-          .lessons-list {
-            padding: var(--spacing-sm);
-            max-height: 300px;
-            overflow-y: auto;
-          }
+            @media (max-width: 768px) {
+                .sidebar-toggle {
+                    left: 20px;
+                    bottom: 20px;
+                    top: auto; /* Floating FAB on mobile */
+                    background: var(--color-orange);
+                    color: white;
+                    border: none;
+                    width: 50px;
+                    height: 50px;
+                    box-shadow: var(--shadow-lg);
+                }
 
-          .lesson-item {
-            padding: var(--spacing-sm);
-          }
+                .sidebar {
+                    position: fixed;
+                    top: 80px; /* Below header */
+                    left: 0;
+                    width: 100%;
+                    height: calc(100vh - 80px);
+                    z-index: 40;
+                }
+                
+                .sidebar.hidden {
+                    transform: translateX(-100%);
+                }
 
-          .lesson-number {
-            width: 32px;
-            height: 32px;
-            font-size: 0.9375rem;
-          }
-
-          .lesson-title {
-            font-size: 0.875rem;
-          }
-        }
-      `}</style>
-        </aside>
-    )
+                .close-btn-mobile {
+                    display: block;
+                }
+            }
+        `}</style>
+    </div>
+  )
 }

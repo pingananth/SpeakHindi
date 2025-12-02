@@ -6,6 +6,13 @@ export const metadata = {
   description: 'Browse all lessons in our structured, self-paced spoken Hindi course. Start learning Hindi in English today.',
 }
 
+import Header from '@/components/Header'
+
 export default function CoursesLayout({ children }: { children: ReactNode }) {
-  return <CoursesLayoutWrapper>{children}</CoursesLayoutWrapper>
+  return (
+    <>
+      <Header />
+      {children}
+    </>
+  )
 }

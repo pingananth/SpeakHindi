@@ -1,0 +1,494 @@
+{
+    "contentTypes": [
+        {
+            "sys": {
+                "id": "lesson",
+                "type": "ContentType"
+            },
+            "name": "Lesson",
+            "description": "A Hindi language lesson",
+            "displayField": "title",
+            "fields": [
+                {
+                    "id": "title",
+                    "name": "Title",
+                    "type": "Symbol",
+                    "required": true
+                },
+                {
+                    "id": "slug",
+                    "name": "Slug",
+                    "type": "Symbol",
+                    "required": true,
+                    "unique": true
+                },
+                {
+                    "id": "lessonNumber",
+                    "name": "Lesson Number",
+                    "type": "Integer",
+                    "required": true
+                },
+                {
+                    "id": "description",
+                    "name": "Description",
+                    "type": "Text",
+                    "required": true
+                },
+                {
+                    "id": "duration",
+                    "name": "Duration",
+                    "type": "Symbol",
+                    "required": false
+                },
+                {
+                    "id": "accessLevel",
+                    "name": "Access Level",
+                    "type": "Symbol",
+                    "required": true,
+                    "validations": [
+                        {
+                            "in": [
+                                "free",
+                                "login-required",
+                                "paid"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": "learningGoals",
+                    "name": "Learning Goals",
+                    "type": "Array",
+                    "required": false,
+                    "items": {
+                        "type": "Symbol"
+                    }
+                },
+                {
+                    "id": "thumbnail",
+                    "name": "Thumbnail",
+                    "type": "Link",
+                    "linkType": "Asset",
+                    "required": false
+                },
+                {
+                    "id": "videoContent",
+                    "name": "Video Content",
+                    "type": "Link",
+                    "linkType": "Entry",
+                    "required": false,
+                    "validations": [
+                        {
+                            "linkContentType": [
+                                "lessonVideo"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": "notesContent",
+                    "name": "Notes Content",
+                    "type": "Link",
+                    "linkType": "Entry",
+                    "required": false,
+                    "validations": [
+                        {
+                            "linkContentType": [
+                                "lessonNotes"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": "quizContent",
+                    "name": "Quiz Content",
+                    "type": "Link",
+                    "linkType": "Entry",
+                    "required": false,
+                    "validations": [
+                        {
+                            "linkContentType": [
+                                "quiz"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": "flashcardSet",
+                    "name": "Flashcard Set",
+                    "type": "Link",
+                    "linkType": "Entry",
+                    "required": false,
+                    "validations": [
+                        {
+                            "linkContentType": [
+                                "flashcardSet"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": "resources",
+                    "name": "Resources",
+                    "type": "Array",
+                    "required": false,
+                    "items": {
+                        "type": "Link",
+                        "linkType": "Entry",
+                        "validations": [
+                            {
+                                "linkContentType": [
+                                    "resource"
+                                ]
+                            }
+                        ]
+                    }
+                },
+                {
+                    "id": "order",
+                    "name": "Order",
+                    "type": "Integer",
+                    "required": false
+                }
+            ]
+        },
+        {
+            "sys": {
+                "id": "lessonVideo",
+                "type": "ContentType"
+            },
+            "name": "Lesson Video",
+            "description": "Video content for a lesson",
+            "displayField": "title",
+            "fields": [
+                {
+                    "id": "title",
+                    "name": "Title",
+                    "type": "Symbol",
+                    "required": true
+                },
+                {
+                    "id": "videoProvider",
+                    "name": "Video Provider",
+                    "type": "Symbol",
+                    "required": true,
+                    "validations": [
+                        {
+                            "in": [
+                                "mux",
+                                "vimeo"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": "videoId",
+                    "name": "Video ID",
+                    "type": "Symbol",
+                    "required": true
+                },
+                {
+                    "id": "playbackId",
+                    "name": "Playback ID (Mux only)",
+                    "type": "Symbol",
+                    "required": false
+                },
+                {
+                    "id": "thumbnail",
+                    "name": "Thumbnail",
+                    "type": "Link",
+                    "linkType": "Asset",
+                    "required": false
+                },
+                {
+                    "id": "transcript",
+                    "name": "Transcript",
+                    "type": "Text",
+                    "required": false
+                },
+                {
+                    "id": "duration",
+                    "name": "Duration",
+                    "type": "Symbol",
+                    "required": false
+                }
+            ]
+        },
+        {
+            "sys": {
+                "id": "lessonNotes",
+                "type": "ContentType"
+            },
+            "name": "Lesson Notes",
+            "description": "Written content and notes for a lesson",
+            "displayField": "title",
+            "fields": [
+                {
+                    "id": "title",
+                    "name": "Title",
+                    "type": "Symbol",
+                    "required": true
+                },
+                {
+                    "id": "content",
+                    "name": "Content",
+                    "type": "RichText",
+                    "required": true
+                },
+                {
+                    "id": "keyPoints",
+                    "name": "Key Points",
+                    "type": "Array",
+                    "required": false,
+                    "items": {
+                        "type": "Symbol"
+                    }
+                },
+                {
+                    "id": "examplePhrases",
+                    "name": "Example Phrases",
+                    "type": "Object",
+                    "required": false
+                }
+            ]
+        },
+        {
+            "sys": {
+                "id": "quiz",
+                "type": "ContentType"
+            },
+            "name": "Quiz",
+            "description": "Quiz for lesson comprehension",
+            "displayField": "title",
+            "fields": [
+                {
+                    "id": "title",
+                    "name": "Title",
+                    "type": "Symbol",
+                    "required": true
+                },
+                {
+                    "id": "description",
+                    "name": "Description",
+                    "type": "Text",
+                    "required": false
+                },
+                {
+                    "id": "questions",
+                    "name": "Questions",
+                    "type": "Array",
+                    "required": true,
+                    "items": {
+                        "type": "Link",
+                        "linkType": "Entry",
+                        "validations": [
+                            {
+                                "linkContentType": [
+                                    "quizQuestion"
+                                ]
+                            }
+                        ]
+                    }
+                },
+                {
+                    "id": "passingScore",
+                    "name": "Passing Score (%)",
+                    "type": "Integer",
+                    "required": false
+                }
+            ]
+        },
+        {
+            "sys": {
+                "id": "quizQuestion",
+                "type": "ContentType"
+            },
+            "name": "Quiz Question",
+            "description": "Individual quiz question",
+            "displayField": "questionText",
+            "fields": [
+                {
+                    "id": "questionText",
+                    "name": "Question Text",
+                    "type": "Text",
+                    "required": true
+                },
+                {
+                    "id": "questionType",
+                    "name": "Question Type",
+                    "type": "Symbol",
+                    "required": true,
+                    "validations": [
+                        {
+                            "in": [
+                                "multiple-choice",
+                                "true-false",
+                                "fill-blank"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": "options",
+                    "name": "Options (JSON)",
+                    "type": "Object",
+                    "required": true
+                },
+                {
+                    "id": "correctAnswer",
+                    "name": "Correct Answer",
+                    "type": "Symbol",
+                    "required": true
+                },
+                {
+                    "id": "explanation",
+                    "name": "Explanation",
+                    "type": "Text",
+                    "required": false
+                },
+                {
+                    "id": "difficulty",
+                    "name": "Difficulty",
+                    "type": "Symbol",
+                    "required": false,
+                    "validations": [
+                        {
+                            "in": [
+                                "easy",
+                                "medium",
+                                "hard"
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "sys": {
+                "id": "flashcardSet",
+                "type": "ContentType"
+            },
+            "name": "Flashcard Set",
+            "description": "Collection of flashcards",
+            "displayField": "title",
+            "fields": [
+                {
+                    "id": "title",
+                    "name": "Title",
+                    "type": "Symbol",
+                    "required": true
+                },
+                {
+                    "id": "cards",
+                    "name": "Cards",
+                    "type": "Array",
+                    "required": true,
+                    "items": {
+                        "type": "Link",
+                        "linkType": "Entry",
+                        "validations": [
+                            {
+                                "linkContentType": [
+                                    "flashcard"
+                                ]
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "sys": {
+                "id": "flashcard",
+                "type": "ContentType"
+            },
+            "name": "Flashcard",
+            "description": "Individual flashcard",
+            "displayField": "front",
+            "fields": [
+                {
+                    "id": "front",
+                    "name": "Front (English)",
+                    "type": "Symbol",
+                    "required": true
+                },
+                {
+                    "id": "back",
+                    "name": "Back (Hindi)",
+                    "type": "Symbol",
+                    "required": true
+                },
+                {
+                    "id": "phonetic",
+                    "name": "Phonetic",
+                    "type": "Symbol",
+                    "required": false
+                },
+                {
+                    "id": "category",
+                    "name": "Category",
+                    "type": "Symbol",
+                    "required": false
+                },
+                {
+                    "id": "audioUrl",
+                    "name": "Audio URL",
+                    "type": "Symbol",
+                    "required": false
+                }
+            ]
+        },
+        {
+            "sys": {
+                "id": "resource",
+                "type": "ContentType"
+            },
+            "name": "Resource",
+            "description": "Downloadable resource",
+            "displayField": "title",
+            "fields": [
+                {
+                    "id": "title",
+                    "name": "Title",
+                    "type": "Symbol",
+                    "required": true
+                },
+                {
+                    "id": "description",
+                    "name": "Description",
+                    "type": "Text",
+                    "required": false
+                },
+                {
+                    "id": "file",
+                    "name": "File",
+                    "type": "Link",
+                    "linkType": "Asset",
+                    "required": true
+                },
+                {
+                    "id": "resourceType",
+                    "name": "Resource Type",
+                    "type": "Symbol",
+                    "required": true,
+                    "validations": [
+                        {
+                            "in": [
+                                "pdf",
+                                "worksheet",
+                                "cheatsheet",
+                                "audio"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": "fileSize",
+                    "name": "File Size",
+                    "type": "Symbol",
+                    "required": false
+                }
+            ]
+        }
+    ]
+}

@@ -15,7 +15,11 @@ export interface Lesson {
     description: string
     accessLevel: AccessLevel
     components: LessonComponent[]
-    videoUrl?: string
+    // Video properties
+    videoUrl?: string // Legacy: for iframe embeds
+    videoProvider?: 'mux' | 'vimeo' // New: video provider type
+    videoId?: string // New: provider-specific video ID
+    playbackId?: string // New: Mux playback ID
     duration?: string
     goals?: string[]
 }
@@ -103,6 +107,23 @@ export const LESSONS: Lesson[] = [
             'Use professional greetings and formalities',
             'Discuss work tasks and projects',
             'Navigate office conversations confidently'
+        ]
+    },
+    // TEST LESSON - Vimeo Integration
+    {
+        id: 99,
+        slug: 'test-vimeo-lesson',
+        title: 'Test Lesson: Vimeo Integration',
+        description: 'A test lesson to verify Vimeo video player integration',
+        accessLevel: 'free',
+        components: ['video', 'notes'],
+        videoProvider: 'vimeo',
+        videoId: '1142315086', // Replace with your Vimeo video ID
+        duration: '10 min',
+        goals: [
+            'Test Vimeo player functionality',
+            'Verify speed controls work',
+            'Check mobile responsiveness'
         ]
     }
 ]

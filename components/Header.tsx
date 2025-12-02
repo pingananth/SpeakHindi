@@ -1,72 +1,75 @@
 'use client'
 
 import Link from 'next/link'
+import { useState, useEffect } from 'react'
+import Logo from './Logo'
 
 export default function Header() {
-    return (
-        <header className="header">
-            <div className="container">
-                <div className="header-content">
-                    <div className="logo-container">
-                        <Link href="/" className="logo">
-                            <div className="logo-placeholder">
-                                <span className="logo-text">SpeakHindi</span>
-                            </div>
-                        </Link>
-                    </div>
+  const [isScrolled, setIsScrolled] = useState(false)
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
-                    <nav className="nav">
-                        <Link href="/" className="nav-link">Home</Link>
-                        <Link href="/courses" className="nav-link">Courses</Link>
-                        <Link href="/use-cases" className="nav-link">Use Cases</Link>
-                        <Link href="/blog" className="nav-link">Blog</Link>
-                    </nav>
-                </div>
-            </div>
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 10)
+    }
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
 
-            <style jsx>{`
+  return (
+    <header className={`header ${isScrolled ? 'scrolled' : ''}`}>
+      <div className="container header-container">
+        <Link href="/" className="logo-link">
+          <Logo />
+        </Link>
+
+        <nav className={`nav ${isMobileMenuOpen ? 'mobile-open' : ''}`}>
+          <Link href="/" className="nav-link">Home</Link>
+          <Link href="/courses" className="nav-link">Courses</Link>
+          <Link href="/use-cases" className="nav-link">Use Cases</Link>
+          <Link href="/blog" className="nav-link">Blog</Link>
+        </nav>
+
+        <button
+          className="mobile-menu-toggle"
+          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          aria-label="Toggle menu"
+        >
+          <span className="hamburger"></span>
+        </button>
+      </div>
+
+      <style jsx>{`
         .header {
           background: var(--color-neutral-white);
-          border-bottom: 1px solid rgba(0, 77, 122, 0.1);
+          border-bottom: 1px solid transparent;
           padding: 1rem 0;
           position: sticky;
           top: 0;
           z-index: 100;
-          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+          transition: all var(--transition-normal);
         }
 
-        .header-content {
+        .header.scrolled {
+          background: rgba(255, 255, 255, 0.95);
+          backdrop-filter: blur(10px);
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+          border-bottom-color: rgba(0, 77, 122, 0.1);
+        }
+
+        .header-container {
           display: flex;
           align-items: center;
           justify-content: space-between;
         }
 
-        .logo-container {
-          flex-shrink: 0;
-        }
-
-        .logo {
+        .logo-link {
           text-decoration: none;
-          display: block;
-        }
-
-        .logo-placeholder {
-          background: linear-gradient(135deg, var(--color-primary-blue) 0%, var(--color-teal) 100%);
-          padding: 0.75rem 1.5rem;
-          border-radius: var(--radius-md);
           transition: transform var(--transition-fast);
         }
 
-        .logo:hover .logo-placeholder {
-          transform: scale(1.05);
-        }
-
-        .logo-text {
-          font-family: var(--font-headline);
-          font-size: 1.5rem;
-          font-weight: 900;
-          color: var(--color-neutral-white);
-          letter-spacing: -0.01em;
+        .logo-link:hover {
+          transform: scale(1.02);
         }
 
         .nav {
@@ -92,50 +95,74 @@ export default function Header() {
           left: 0;
           width: 0;
           height: 2px;
-          background: var(--color-teal);
+          background: var(--color-orange);
           transition: width var(--transition-normal);
         }
 
         .nav-link:hover {
-          color: var(--color-teal);
+          color: var(--color-orange);
         }
 
         .nav-link:hover::after {
           width: 100%;
         }
 
-        @media (max-width: 768px) {
-          .header {
-            padding: 0.75rem 0;
-          }
-
-          .logo-placeholder {
-            padding: 0.5rem 1rem;
-          }
-
-          .logo-text {
-            font-size: 1.25rem;
-          }
-
-          .nav {
-            gap: var(--spacing-sm);
-          }
-
-          .nav-link {
-            font-size: 0.875rem;
-          }
+        .mobile-menu-toggle {
+          display: none;
+          background: none;
+          border: none;
+          cursor: pointer;
+          padding: 0.5rem;
         }
 
-        @media (max-width: 480px) {
-          .nav {
-            gap: var(--spacing-xs);
+        .hamburger {
+          display: block;
+          width: 24px;
+          height: 2px;
+          background: var(--color-primary-blue);
+          position: relative;
+        }
+
+        .hamburger::before,
+        .hamburger::after {
+          content: '';
+          position: absolute;
+          width: 100%;
+          height: 100%;
+          background: inherit;
+          left: 0;
+          transition: all var(--transition-fast);
+        }
+
+        .hamburger::before { top: -8px; }
+        .hamburger::after { bottom: -8px; }
+
+        @media (max-width: 768px) {
+          .mobile-menu-toggle {
+            display: block;
           }
 
-          .nav-link {
-            font-size: 0.8125rem;
+          .nav {
+            position: fixed;
+            top: 70px;
+            left: 0;
+            width: 100%;
+            background: var(--color-neutral-white);
+            flex-direction: column;
+            padding: var(--spacing-lg);
+            gap: var(--spacing-md);
+            border-bottom: 1px solid var(--color-neutral-gray-dark);
+            transform: translateY(-150%);
+            transition: transform var(--transition-normal);
+            z-index: 99;
+          }
+
+          .nav.mobile-open {
+            transform: translateY(0);
+            box-shadow: var(--shadow-lg);
           }
         }
       `}</style>
-        </header>
-    )
+    </header>
+  )
 }
